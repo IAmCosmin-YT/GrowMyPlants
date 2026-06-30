@@ -1,0 +1,93 @@
+{ "frames": {
+   "plants 0.aseprite": {
+    "frame": { "x": 0, "y": 0, "w": 40, "h": 42 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 106, "y": 78, "w": 40, "h": 42 },
+    "sourceSize": { "w": 640, "h": 360 },
+    "duration": 100
+   },
+   "plants 1.aseprite": {
+    "frame": { "x": 40, "y": 0, "w": 40, "h": 42 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 106, "y": 78, "w": 40, "h": 42 },
+    "sourceSize": { "w": 640, "h": 360 },
+    "duration": 100
+   },
+   "plants 2.aseprite": {
+    "frame": { "x": 80, "y": 0, "w": 40, "h": 42 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 106, "y": 78, "w": 40, "h": 42 },
+    "sourceSize": { "w": 640, "h": 360 },
+    "duration": 100
+   },
+   "plants 3.aseprite": {
+    "frame": { "x": 120, "y": 0, "w": 40, "h": 42 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 106, "y": 78, "w": 40, "h": 42 },
+    "sourceSize": { "w": 640, "h": 360 },
+    "duration": 100
+   },
+   "plants 4.aseprite": {
+    "frame": { "x": 160, "y": 0, "w": 40, "h": 42 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 106, "y": 78, "w": 40, "h": 42 },
+    "sourceSize": { "w": 640, "h": 360 },
+    "duration": 100
+   },
+   "plants 5.aseprite": {
+    "frame": { "x": 200, "y": 0, "w": 40, "h": 42 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 106, "y": 78, "w": 40, "h": 42 },
+    "sourceSize": { "w": 640, "h": 360 },
+    "duration": 100
+   },
+   "plants 6.aseprite": {
+    "frame": { "x": 240, "y": 0, "w": 40, "h": 42 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 106, "y": 78, "w": 40, "h": 42 },
+    "sourceSize": { "w": 640, "h": 360 },
+    "duration": 100
+   },
+   "plants 7.aseprite": {
+    "frame": { "x": 280, "y": 0, "w": 40, "h": 42 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 106, "y": 78, "w": 40, "h": 42 },
+    "sourceSize": { "w": 640, "h": 360 },
+    "duration": 100
+   },
+   "plants 8.aseprite": {
+    "frame": { "x": 320, "y": 0, "w": 40, "h": 42 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 106, "y": 78, "w": 40, "h": 42 },
+    "sourceSize": { "w": 640, "h": 360 },
+    "duration": 100
+   }
+ },
+ "meta": {
+  "app": "https://www.aseprite.org/",
+  "version": "1.x-dev",
+  "image": "fly.png",
+  "format": "RGBA8888",
+  "size": { "w": 360, "h": 42 },
+  "scale": "1",
+  "frameTags": [
+  ],
+  "layers": [
+   { "name": "Fly" },
+   { "name": "FlyWingBehind", "group": "Fly", "opacity": 255, "blendMode": "normal" },
+   { "name": "Fly", "group": "Fly", "opacity": 255, "blendMode": "normal" },
+   { "name": "WingFront", "group": "Fly", "opacity": 255, "blendMode": "normal" }
+  ],
+  "slices": [
+  ]
+ }
+}

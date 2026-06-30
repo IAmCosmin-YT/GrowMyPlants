@@ -1,0 +1,22 @@
+{
+ "meta": {
+  "app": "https://www.aseprite.org/",
+  "version": "1.x-dev",
+  "image": "vase.png",
+  "format": "RGBA8888",
+  "size": { "w": 512, "h": 132 },
+  "frame": { "x": 0, "y": 0, "w": 128, "h": 132 },
+  "scale": "1",
+  "frameTags": [
+  ],
+  "layers": [
+   { "name": "Vase" },
+   { "name": "Behindvase", "group": "Vase", "opacity": 255, "blendMode": "normal" },
+   { "name": "dirt", "group": "Vase", "opacity": 255, "blendMode": "normal" },
+   { "name": "VaseOutline", "group": "Vase", "opacity": 255, "blendMode": "normal" },
+   { "name": "VaseColor", "group": "Vase", "opacity": 255, "blendMode": "normal" }
+  ],
+  "slices": [
+  ]
+ }
+}

@@ -1,0 +1,12 @@
+{
+  "meta": {
+  "size": { "w": 1308, "h": 298 },
+  "frame": {"w": 109, "h": 149 },
+  "frames":12,
+  "layers": [
+    { "name": "FirstPlant" },
+    { "name": "plant1", "group": "FirstPlant", "opacity": 255, "blendMode": "normal" },
+    { "name": "Plant2", "group": "FirstPlant", "opacity": 255, "blendMode": "normal" }
+  ]
+  }
+}

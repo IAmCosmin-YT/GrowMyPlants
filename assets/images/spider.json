@@ -1,0 +1,29 @@
+{ "frames": {
+   "plants 0.aseprite": {
+    "frame": { "x": 0, "y": 0, "w": 43, "h": 202 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 298, "y": 48, "w": 43, "h": 202 },
+    "sourceSize": { "w": 640, "h": 360 },
+    "duration": 100
+   }
+ },
+ "meta": {
+  "app": "https://www.aseprite.org/",
+  "version": "1.x-dev",
+  "image": "spider.png",
+  "format": "RGBA8888",
+  "size": { "w": 43, "h": 202 },
+  "scale": "1",
+  "frameTags": [
+  ],
+  "layers": [
+   { "name": "Spider" },
+   { "name": "Legs", "group": "Spider", "opacity": 255, "blendMode": "normal" },
+   { "name": "Body", "group": "Spider", "opacity": 255, "blendMode": "normal" },
+   { "name": "String", "group": "Spider", "opacity": 255, "blendMode": "normal" }
+  ],
+  "slices": [
+  ]
+ }
+}
