@@ -8,9 +8,13 @@ import numpy as np
 DEBUG = False
 
 SCREEN = WIDTH, HEIGHT = 640, 360
+SCALE_FACTOR = WIDTH / HEIGHT
+
 pg.init()
 clock = pg.time.Clock()
-screen = pg.display.set_mode(SCREEN)
+screen = pg.display.set_mode(SCREEN, pg.RESIZABLE)
+# need to use a separate surface for scaling, otherwise the game will look blurry when scaled up
+game_surface = pg.Surface(SCREEN)
 
 font_kiwi = pg.font.Font(r"assets\fonts\KiwiSoda.ttf", 24)
 font_arial = pg.font.SysFont("Arial", 24)
