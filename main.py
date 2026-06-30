@@ -130,6 +130,17 @@ class Item:
         self.modifiers = modifiers
 
 
+class ShopItem(Item):
+    def __init__(
+        self, name, description, image_path, price, modifiers, level=0, one_time=False
+    ):
+        super().__init__(price, modifiers, level, one_time)
+        self.name = name
+        self.description = description
+        self.image = pg.image.load(image_path).convert_alpha()
+        self.purchased = False
+
+
 class PlayerStats:
     def __init__(self):
         self.score = 0
@@ -157,9 +168,139 @@ class PlayerStats:
         ]
         draw_debug_lines(screen, lines, pos=(10, 40))
 
-    def buy(self, item: Item):
+    def buy(self, item: ShopItem) -> bool:
+        if item.one_time and item.purchased:
+            return False
+        if self.money < item.price:
+            return False
 
-        pass
+        self.money -= item.price
+        for key, val in item.modifiers.items():
+            if key in self.upgrades:
+                self.upgrades[key] += val
+
+        if item.one_time:
+            item.purchased = True
+        return True
+
+
+class ScrollRect:
+    """A scrollable, rounded-corner panel for displaying purchasable items (a shop)."""
+
+    def __init__(
+        self,
+        rect,
+        items,
+        stats: PlayerStats,
+        radius=12,
+        item_height=90,
+        padding=10,
+        bg_color=(30, 30, 40, 230),
+        entry_color=(50, 50, 65, 255),
+        scroll_speed=30,
+    ):
+        self.rect = pg.Rect(rect)
+        self.items = items  # list[ShopItem]
+        self.stats = stats
+        self.radius = radius
+        self.item_height = item_height
+        self.padding = padding
+        self.bg_color = bg_color
+        self.entry_color = entry_color
+        self.scroll_speed = scroll_speed
+        self.scroll_y = 0
+
+        self.content_height = max(
+            self.rect.height,
+            len(items) * (item_height + padding) + padding,
+        )
+
+        # rounded-rect alpha mask, precomputed once at panel size
+        self.mask = pg.Surface(self.rect.size, pg.SRCALPHA)
+        pg.draw.rect(
+            self.mask,
+            (255, 255, 255, 255),
+            self.mask.get_rect(),
+            border_radius=self.radius,
+        )
+
+        # (item, content-space rect) for buy buttons, rebuilt each draw()
+        self._buy_rects = []
+
+    def handle_event(self, event):
+        """Call this from your event loop for scroll support."""
+        if event.type == pg.MOUSEWHEEL and self.rect.collidepoint(pg.mouse.get_pos()):
+            self.scroll_y -= event.y * self.scroll_speed
+            max_scroll = max(0, self.content_height - self.rect.height)
+            self.scroll_y = max(0, min(self.scroll_y, max_scroll))
+
+    def handle_click(self, mouse_pos, clicked):
+        """Call once per frame with the current mouse pos and a one-frame click flag.
+        Returns the ShopItem that was successfully purchased, or None."""
+        if not clicked or not self.rect.collidepoint(mouse_pos):
+            return None
+
+        local_pos = (
+            mouse_pos[0] - self.rect.x,
+            mouse_pos[1] - self.rect.y + self.scroll_y,
+        )
+        for item, btn_rect in self._buy_rects:
+            if btn_rect.collidepoint(local_pos):
+                return item if self.stats.buy(item) else None
+        return None
+
+    def draw(self, screen):
+        content_surf = pg.Surface((self.rect.width, self.content_height), pg.SRCALPHA)
+        content_surf.fill(self.bg_color)
+
+        self._buy_rects = []
+        y = self.padding
+        for item in self.items:
+            entry_rect = pg.Rect(
+                self.padding, y, self.rect.width - self.padding * 2, self.item_height
+            )
+            self._draw_entry(content_surf, item, entry_rect)
+            y += self.item_height + self.padding
+
+        # slice the visible window out of the full content
+        view = pg.Surface(self.rect.size, pg.SRCALPHA)
+        view.blit(content_surf, (0, -self.scroll_y))
+
+        # clip corners: alpha becomes min(content_alpha, mask_alpha) per pixel
+        view.blit(self.mask, (0, 0), special_flags=pg.BLEND_RGBA_MIN)
+
+        screen.blit(view, self.rect.topleft)
+        pg.draw.rect(screen, (255, 255, 255), self.rect, 2, border_radius=self.radius)
+
+    def _draw_entry(self, surf, item: ShopItem, entry_rect):
+        pg.draw.rect(surf, self.entry_color, entry_rect, border_radius=8)
+
+        img_rect = item.image.get_rect(midleft=(entry_rect.x + 10, entry_rect.centery))
+        surf.blit(item.image, img_rect)
+
+        text_x = img_rect.right + 10
+        name_surf = font_kiwi.render(item.name, True, (255, 255, 255))
+        surf.blit(name_surf, (text_x, entry_rect.y + 8))
+
+        desc_surf = font_arial.render(item.description, True, (200, 200, 200))
+        surf.blit(desc_surf, (text_x, entry_rect.y + 36))
+
+        btn_w, btn_h = 80, 30
+        btn_rect = pg.Rect(
+            entry_rect.right - btn_w - 10, entry_rect.centery - btn_h // 2, btn_w, btn_h
+        )
+
+        if item.one_time and item.purchased:
+            label, color = "OWNED", (80, 80, 80)
+        else:
+            label = f"${item.price}"
+            color = (60, 140, 60) if self.stats.money >= item.price else (140, 60, 60)
+
+        pg.draw.rect(surf, color, btn_rect, border_radius=6)
+        label_surf = font_arial.render(label, True, (255, 255, 255))
+        surf.blit(label_surf, label_surf.get_rect(center=btn_rect.center))
+
+        self._buy_rects.append((item, btn_rect))
 
 
 class Button:
@@ -463,6 +604,26 @@ def main():
     plant = None
     money_text = font_kiwi.render(f"MONEY: {player.money}", True, (50, 150, 0))
 
+    shop_items = [
+        ShopItem(
+            name="Faster Growth",
+            description="+0.1 grow speed",
+            image_path=r"assets\images\blood.png",
+            price=50,
+            modifiers={"grow_speed": 0.1},
+        ),
+        ShopItem(
+            name="Golden Pot",
+            description="Permanently unlocks golden plants",
+            image_path=r"assets\images\blood.png",
+            price=200,
+            modifiers={"golden_chance": 5},
+            one_time=True,
+        ),
+    ]
+
+    shop = ScrollRect(rect=(WIDTH - 220, 20, 200, 280), items=shop_items, stats=player)
+
     # items
     slapper = DraggableItem(
         pos=(WIDTH - 100, HEIGHT - 100),
@@ -486,11 +647,13 @@ def main():
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 running = False
+            shop.handle_event(event)
 
         dt = clock.tick(60) / 1000
 
         mb0_pressed = pg.mouse.get_pressed()[0]
         mb2_pressed = pg.mouse.get_pressed()[2]
+
         # print(mb0_pressed, mb2_pressed)
         keys = pg.key.get_pressed()
         inter_timeout -= dt
@@ -535,6 +698,12 @@ def main():
             # print("Money", player.money)
             money_text = font_kiwi.render(f"MONEY: {player.money}", True, (50, 150, 0))
             plant = None
+
+        purchased = shop.handle_click(mouse_pos, mb0_pressed)
+        if purchased:
+            print(f"Bought {purchased.name}")
+
+        shop.draw(screen)
 
         if DEBUG or keys[pg.K_d]:
             player.debug_draw(screen)
