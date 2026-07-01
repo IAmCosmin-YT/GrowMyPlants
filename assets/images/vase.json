@@ -48,9 +48,17 @@
         "masks": [
             {
                 "name": "wet_soil",
-                "path": "E:/PythonDocs/GrowMyPlants/assets/images/wet_soil.png",
+                "path": "assets/images/wet_soil.png",
                 "layer": "dirt",
                 "opacity": 155,
+                "blendMode": "normal"
+            },
+            {
+                "name": "gold_soil",
+                "path": "assets/images/gold_soil.png",
+                "sprite_sheet_data": "assets/images/gold_soil.json",
+                "layer": "dirt",
+                "opacity": 255,
                 "blendMode": "normal"
             }
         ]
